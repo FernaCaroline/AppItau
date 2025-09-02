@@ -1,0 +1,362 @@
+package com.example.bancoitau
+
+import android.R
+import android.annotation.SuppressLint
+import android.os.Bundle
+import android.text.Layout
+import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.border
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ExitToApp
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.AddCircle
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Favorite
+import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.MailOutline
+import androidx.compose.material.icons.filled.Phone
+import androidx.compose.material.icons.filled.Send
+import androidx.compose.material3.Icon
+import androidx.compose.ui.Alignment
+import com.example.bancoitau.ui.theme.BancoItauTheme
+
+
+import com.example.bancoitau.segundaTela
+
+class MainActivity : ComponentActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContent {
+            BancoItauTheme {
+                segundaTela()
+                //primeiraTela()
+            }
+        }
+    }
+}
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@Composable
+fun primeiraTela() {
+    Scaffold {
+        Column(modifier = Modifier.padding(16.dp)) {
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp),
+                verticalAlignment = Alignment.Bottom) {
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White
+                    )
+                {
+                    bloco("Olá, Fernanda!\nCPF ***013.***-**", cor = Color.White)
+                }
+
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .height(height = 70.dp)
+                        .padding(8.dp)
+                        .border(width = 3.dp,
+                            color = Color(0xFF020079),
+                            shape = RoundedCornerShape(16.dp)
+                        ),
+                    shadowElevation = 0.dp, // opcional: sem sombra se quiser só a borda
+                    tonalElevation = 0.dp)
+                {
+                    bloco2("Trocar de conta", Color.White, 150, alinhamentoTexto = Alignment.Center)
+                }
+
+            }
+
+
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
+
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                )
+
+                {
+                    Box {
+                        bloco("Acessar", Color.White)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.ExitToApp,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Segunda linha com dois cards
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                        bloco("Pix e transferir", Color.White)
+                        Icon(
+                            imageVector = Icons.AutoMirrored.Filled.Send,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                        bloco("Pagar", Color.White)
+                        Icon(
+                            imageVector = Icons.Default.DateRange,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Terceira linha com dois cards
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                        bloco("Extrato", Color.White)
+                        Icon(
+                            imageVector = Icons.Default.Info,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                            bloco("Cartões", Color.White)
+                            Icon(
+                                imageVector = Icons.Default.MailOutline,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .size(50.dp)
+                                    .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                    .align(Alignment.TopStart),
+                                tint = Color(0xFFFF4000)
+                            )
+                        }
+                    }
+            }
+
+            Spacer(modifier = Modifier.height(10.dp))
+
+            // Quarta linha com três cards
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box{
+                        bloco("Area Pix", Color.White)
+                        Icon(
+                            imageVector = Icons.Default.Favorite,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                                tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                        bloco("iToken", Color.White)
+                        Icon(
+                            imageVector = Icons.Default.AddCircle,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+                Surface(
+                    modifier = Modifier
+                        .weight(1f)
+                        .padding(8.dp),
+                    color = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    shadowElevation = 6.dp,
+                    tonalElevation = 6.dp
+                ) {
+                    Box {
+                        bloco("Ajuda", Color.White)
+                        Icon(
+                            imageVector = Icons.Default.Phone,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .size(50.dp)
+                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .align(Alignment.TopStart),
+                            tint = Color(0xFFFF4000)
+                        )
+                    }
+                }
+            }
+        }
+    }
+}
+
+@Composable
+fun bloco(titulo: String, cor: Color) {
+    Box(
+        modifier = Modifier
+            .height(150.dp)
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp),
+            color = cor
+        ) {
+            // Conteúdo do card
+        }
+
+        // Texto alinhado no canto inferior esquerdo
+        Column(
+            modifier = Modifier
+                .align(Alignment.BottomStart)
+                .padding(10.dp)
+        ) {
+            Text(
+                text = titulo,
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
+            )
+        }
+    }
+}
+
+@Composable
+fun bloco2(
+    titulo: String,
+    cor: Color,
+    altura: Int,
+    alinhamentoTexto: Alignment = Alignment.BottomStart){
+    Box(
+        modifier = Modifier
+            .height(altura.dp)
+            .fillMaxWidth()
+            .padding(8.dp)
+    ) {
+        Surface(
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(4.dp),
+            color = cor
+        ) {
+            // Conteúdo do card
+        }
+
+        // Texto alinhado no canto inferior esquerdo
+        Column(
+            modifier = Modifier
+                .align(alinhamentoTexto)
+                .padding(10.dp)
+        ) {
+            Text(
+                text = titulo,
+                style = MaterialTheme.typography.titleMedium,
+                color = Color.Black
+            )
+        }
+    }
+}
+
+
