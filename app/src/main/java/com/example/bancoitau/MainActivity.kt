@@ -9,6 +9,9 @@ import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -20,6 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.Send
@@ -35,6 +39,8 @@ import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
+import android.widget.Toast
+import androidx.compose.ui.platform.LocalContext
 import com.example.bancoitau.ui.theme.BancoItauTheme
 
 
@@ -45,16 +51,24 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             BancoItauTheme {
-                segundaTela()
-                //primeiraTela()
+                val navController = rememberNavController()
+
+                NavHost(navController = navController, startDestination = "tela1") {
+                    composable("tela1") { primeiraTela(navController) }
+                    composable("tela2") { segundaTela(navController) }
+                }
             }
         }
     }
 }
 
+
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun primeiraTela() {
+fun primeiraTela(navController: androidx.navigation.NavController) {
+
+    val context = LocalContext.current
+
     Scaffold {
         Column(modifier = Modifier.padding(16.dp)) {
 
@@ -93,14 +107,17 @@ fun primeiraTela() {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
-                        .padding(8.dp),
+                        .padding(8.dp)
+                        .height(150.dp)
+                        .clickable {
+                            Toast.makeText(context, "Acessando sua conta :)", Toast.LENGTH_SHORT).show()
+                            navController.navigate("tela2")
+                        },
                     color = Color.White,
-                    shape = RoundedCornerShape(16.dp),
                     shadowElevation = 6.dp,
-                    tonalElevation = 6.dp
-                )
-
-                {
+                    tonalElevation = 6.dp,
+                    shape = RoundedCornerShape(16.dp)
+                ) {
                     Box {
                         bloco("Acessar", Color.White)
                         Icon(
@@ -108,7 +125,7 @@ fun primeiraTela() {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )

@@ -2,6 +2,7 @@ package com.example.bancoitau
 import android.R
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -19,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ExitToApp
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
@@ -41,13 +43,16 @@ import androidx.compose.material.icons.filled.Send
 import androidx.compose.material3.Icon
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 import com.example.bancoitau.ui.theme.BancoItauTheme
 
 import com.example.bancoitau.MainActivity
 
 
 @Composable
-fun segundaTela() {
+fun segundaTela(navController: NavController) {
+
     Scaffold(
         bottomBar= {
             Surface(
@@ -64,7 +69,16 @@ fun segundaTela() {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    BottomNavItem(icon = Icons.Default.Home, label = "Início")
+                    BottomNavItem(
+                        icon = Icons.Default.Home,
+                        label = "Início",
+                        selected = true,
+                        onClick = {
+                            navController.navigate("tela1") {
+                                popUpTo("tela1") { inclusive = true }
+                            }
+                        }
+                    )
                     BottomNavItem(icon = Icons.Default.Menu, label = "Extrato")
                     BottomNavItem(icon = Icons.Default.Send, label = "Pagamentos")
                     BottomNavItem(icon = Icons.Default.MoreVert, label = "Menu")
@@ -76,22 +90,18 @@ fun segundaTela() {
     { innerPadding ->
         Column(
             modifier = Modifier
-                //.padding(innerPadding)
-                //.padding(16.dp)
                 .fillMaxSize()
         ) {
-            TopBarItau(nome = "Fernanda") /////////////////
-            Spacer(modifier = Modifier.height(16.dp))///////////////
+            TopBarItau(nome = "Fernanda")
+            Spacer(modifier = Modifier.height(16.dp))
+
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 modifier = Modifier.fillMaxWidth()
-            )
-
-            {
+            ) {
                 Text(
                     text = "Meu Itaú",
                     style = MaterialTheme.typography.bodyLarge,
-                    //fontSize = 20.dp,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     modifier = Modifier.weight(1f)
@@ -101,14 +111,13 @@ fun segundaTela() {
                     imageVector = Icons.Default.Face,
                     contentDescription = "Ver mais",
                     tint = Color.Black,
-                    modifier = Modifier
-                        .padding(20.dp)
+                    modifier = Modifier.padding(20.dp)
                 )
             }
 
             Spacer(modifier = Modifier.height(60.dp))
 
-
+            // Cards Pix / Pagar / Cartão
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Surface(
                     modifier = Modifier
@@ -177,9 +186,11 @@ fun segundaTela() {
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(24.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Card Conta Corrente
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -188,14 +199,9 @@ fun segundaTela() {
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 6.dp,
                     tonalElevation = 6.dp
-                )
-
-                {
+                ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        // Top Row - ícone + título
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.AccountBox,
                                 contentDescription = "Conta",
@@ -212,50 +218,26 @@ fun segundaTela() {
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
-
-                        // Texto Saldo
-                        Text(
-                            text = "Saldo",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
-
+                        Text(text = "Saldo", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                         Spacer(modifier = Modifier.height(4.dp))
-
-                        // Valor ocultado
-                        Text(
-                            text = "••••••",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Black
-                        )
+                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.SemiBold, color = Color.Black)
 
                         Spacer(modifier = Modifier.height(24.dp))
-
-
-                        // Limite da Conta
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Limite da Conta",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black,
-                                modifier = Modifier.weight(1f)
-                            )
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowRight,
-                                contentDescription = "Ver mais",
-                                tint = Color.Gray
-                            )
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                            Text(text = "Limite da Conta", style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black, modifier = Modifier.weight(1f))
+                            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Ver mais",
+                                tint = Color.Gray)
                         }
                     }
                 }
             }
-            Spacer(modifier = Modifier.height(24.dp))
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
 
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Card Cartão de Crédito
+            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -264,14 +246,9 @@ fun segundaTela() {
                     shape = RoundedCornerShape(16.dp),
                     shadowElevation = 6.dp,
                     tonalElevation = 6.dp
-                )
-
-                {
+                ) {
                     Column(modifier = Modifier.padding(16.dp)) {
-                        // Top Row - ícone + título
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
                             Icon(
                                 imageVector = Icons.Default.MailOutline,
                                 contentDescription = "Cartão de crédito",
@@ -280,74 +257,52 @@ fun segundaTela() {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "Cartão de crédito",
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontWeight = FontWeight.Bold
-                                ),
+                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
                                 color = Color.Black
                             )
                         }
 
                         Spacer(modifier = Modifier.height(16.dp))
-
-                        // Texto Saldo
-                        Text(
-                            text = "Fatura",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = Color.Gray
-                        )
-
+                        Text(text = "Fatura", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                         Spacer(modifier = Modifier.height(4.dp))
-
-                        // Valor ocultado
-                        Text(
-                            text = "••••••",
-                            style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Black
-                        )
+                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge,
+                            fontWeight = FontWeight.SemiBold, color = Color.Black)
 
                         Spacer(modifier = Modifier.height(24.dp))
-
-                        // Limite da Conta
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            modifier = Modifier.fillMaxWidth()
-                        ) {
-                            Text(
-                                text = "Limite da cartão",
-                                style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black,
-                                modifier = Modifier.weight(1f)
-                            )
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowRight,
-                                contentDescription = "Ver mais",
-                                tint = Color.Gray
-                            )
+                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
+                            Text(text = "Limite da cartão", style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black, modifier = Modifier.weight(1f))
+                            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Ver mais",
+                                tint = Color.Gray)
                         }
                     }
                 }
             }
-
         }
     }
 }
-
 @Composable
 fun BottomNavItem(
     icon: ImageVector,
     label: String,
-    selected: Boolean = false // você pode usar isso futuramente
+    selected: Boolean = false,
+    onClick: () -> Unit = {}
 ) {
+    val context = LocalContext.current
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = Modifier.padding(horizontal = 8.dp)
+        modifier = Modifier
+            .padding(horizontal = 8.dp)
+            .clickable { onClick()
+
+
+                Toast.makeText(context, "Voltando ao início...", Toast.LENGTH_SHORT).show()}
     ) {
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = if (selected) Color(0xFFFF4000) else Color.Black,
+            tint = if (selected) Color(0xFFFF4000) else Color.Black, //por enquanto vou deixar assim, mas n gostei
             modifier = Modifier.size(24.dp)
         )
         Text(
@@ -357,6 +312,3 @@ fun BottomNavItem(
         )
     }
 }
-
-
-
