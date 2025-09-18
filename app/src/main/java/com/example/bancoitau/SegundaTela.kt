@@ -45,9 +45,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-import com.example.bancoitau.ui.theme.BancoItauTheme
 
-import com.example.bancoitau.MainActivity
 
 
 @Composable
@@ -79,18 +77,26 @@ fun segundaTela(navController: NavController) {
                             }
                         }
                     )
-                    BottomNavItem(icon = Icons.Default.Menu, label = "Extrato")
+                    BottomNavItem(
+                        icon = Icons.Default.Menu,
+                        label = "Extrato",
+                        selected = true,
+                        onClick = {
+                            navController.navigate("tela3") {
+                                popUpTo("tela3") { inclusive = true }
+                            }
+                        }
+                    )
                     BottomNavItem(icon = Icons.Default.Send, label = "Pagamentos")
                     BottomNavItem(icon = Icons.Default.MoreVert, label = "Menu")
                 }
             }
         }
-    )
-
-    { innerPadding ->
+    ) { innerPadding ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
+                .padding(innerPadding)
         ) {
             TopBarItau(nome = "Fernanda")
             Spacer(modifier = Modifier.height(16.dp))
@@ -104,7 +110,8 @@ fun segundaTela(navController: NavController) {
                     style = MaterialTheme.typography.bodyLarge,
                     fontWeight = FontWeight.Bold,
                     color = Color.Black,
-                    modifier = Modifier.weight(1f)
+                    modifier = Modifier
+                        .weight(1f)
                         .padding(horizontal = 20.dp)
                 )
                 Icon(
@@ -117,7 +124,6 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(60.dp))
 
-            // Cards Pix / Pagar / Cartão
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                 Surface(
                     modifier = Modifier
@@ -189,7 +195,6 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Card Conta Corrente
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
                 Surface(
                     modifier = Modifier
@@ -236,7 +241,6 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            // Card Cartão de Crédito
             Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
                 Surface(
                     modifier = Modifier
@@ -281,6 +285,7 @@ fun segundaTela(navController: NavController) {
         }
     }
 }
+
 @Composable
 fun BottomNavItem(
     icon: ImageVector,
@@ -302,7 +307,7 @@ fun BottomNavItem(
         Icon(
             imageVector = icon,
             contentDescription = label,
-            tint = if (selected) Color(0xFFFF4000) else Color.Black, //por enquanto vou deixar assim, mas n gostei
+            tint = if (selected) Color(0xFFFF4000) else Color.Black,
             modifier = Modifier.size(24.dp)
         )
         Text(

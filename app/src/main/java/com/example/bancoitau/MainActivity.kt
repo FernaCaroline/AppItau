@@ -43,8 +43,10 @@ import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import com.example.bancoitau.ui.theme.BancoItauTheme
 
-
-import com.example.bancoitau.segundaTela
+//O card "Acessar" dará acesso à segunda tela.
+//Na segunda tela, o botão inferior ''Extrato", leva à terceira tela.
+//Na terceira tela, o botão "Conectar" - da Poupança -, leva à quarta tela.
+//Na quarta tela, é possível adicionar manualmente o valor desejado, e este será exibido quando clicar em "Adicionar".
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,6 +58,8 @@ class MainActivity : ComponentActivity() {
                 NavHost(navController = navController, startDestination = "tela1") {
                     composable("tela1") { primeiraTela(navController) }
                     composable("tela2") { segundaTela(navController) }
+                    composable("tela3") { terceiraTela(navController) }
+                    composable("tela4") { quartaTela(navController) }
                 }
             }
         }
@@ -93,7 +97,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             color = Color(0xFF020079),
                             shape = RoundedCornerShape(16.dp)
                         ),
-                    shadowElevation = 0.dp, // opcional: sem sombra se quiser só a borda
+                    shadowElevation = 0.dp,
                     tonalElevation = 0.dp)
                 {
                     bloco2("Trocar de conta", Color.White, 150, alinhamentoTexto = Alignment.Center)
@@ -153,7 +157,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )
@@ -175,7 +179,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )
@@ -203,7 +207,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )
@@ -225,7 +229,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                                 contentDescription = "",
                                 modifier = Modifier
                                     .size(50.dp)
-                                    .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                    .padding(8.dp)
                                     .align(Alignment.TopStart),
                                 tint = Color(0xFFFF4000)
                             )
@@ -253,7 +257,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                                 tint = Color(0xFFFF4000)
                         )
@@ -275,7 +279,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )
@@ -297,7 +301,7 @@ fun primeiraTela(navController: androidx.navigation.NavController) {
                             contentDescription = "",
                             modifier = Modifier
                                 .size(50.dp)
-                                .padding(8.dp) // alinhado junto com o texto, ajuste o padding para não sobrepor
+                                .padding(8.dp)
                                 .align(Alignment.TopStart),
                             tint = Color(0xFFFF4000)
                         )
@@ -322,10 +326,8 @@ fun bloco(titulo: String, cor: Color) {
                 .padding(4.dp),
             color = cor
         ) {
-            // Conteúdo do card
         }
 
-        // Texto alinhado no canto inferior esquerdo
         Column(
             modifier = Modifier
                 .align(Alignment.BottomStart)
@@ -358,10 +360,8 @@ fun bloco2(
                 .padding(4.dp),
             color = cor
         ) {
-            // Conteúdo do card
         }
 
-        // Texto alinhado no canto inferior esquerdo
         Column(
             modifier = Modifier
                 .align(alinhamentoTexto)
