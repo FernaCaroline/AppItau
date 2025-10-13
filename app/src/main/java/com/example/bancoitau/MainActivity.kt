@@ -42,6 +42,10 @@ import androidx.compose.ui.Alignment
 import android.widget.Toast
 import androidx.compose.ui.platform.LocalContext
 import com.example.bancoitau.ui.theme.BancoItauTheme
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
 
 //O card "Acessar" dará acesso à segunda tela.
 //Na segunda tela, o botão inferior ''Extrato", leva à terceira tela.
