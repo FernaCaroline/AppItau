@@ -1,83 +1,96 @@
 package com.example.bancoitau
 
+import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.foundation.verticalScroll
-import androidx.compose.foundation.rememberScrollState
-import androidx.compose.material3.*
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.CheckCircle
+import androidx.compose.material.icons.filled.Create
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
+import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.unit.dp
 import androidx.compose.ui.text.font.FontWeight
-import androidx.navigation.NavController
+import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.compose.ui.platform.LocalContext
 
 
-data class Transacao(
-    val titulo: String,
-    val descricao: String,
-    val valor: Double
-)
+
 @Composable
 fun terceiraTela(navController: NavController) {
-    val scrollState = rememberScrollState()
-
-    val actions = listOf(
-        Pair("Controle de\ngastos", Icons.Default.Create),
-        Pair("Comprovantes", Icons.Default.Search),
-        Pair("Trazer dinheiro", Icons.Default.Add)
+    val context = LocalContext.current
+    val vm: TransacaoViewModel = viewModel(
+        factory = TransacaoViewModel.factory(context.applicationContext as Application)
     )
 
+    val lista by vm.lista.collectAsState()
 
+    var showAddDialog by remember { mutableStateOf(false) }
 
-    var tarefas by remember {
-        mutableStateOf(
-            listOf(
-                Transacao("Pagamento", "Pagamento de conta de luz", valor = 99.0),
-                Transacao("Pix Recebido", "Transferência recebida do João", valor = 1000.0),
-                Transacao("Depósito", "Depósito em conta poupança", valor = 30.0),
-                Transacao("Depósito", "Compra no supermercado", valor = 285.0)
-            )
-        )
-    }
+// edição
+    var editing by remember { mutableStateOf<TransacaoEntity?>(null) }
+
+    val actions = listOf(
+        "Controle de\ngastos" to Icons.Filled.Create,
+        "Comprovantes" to Icons.Filled.Search,
+        "Trazer dinheiro" to Icons.Filled.Add
+    )
 
     Scaffold(
-        bottomBar = {
-            Surface(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(72.dp),
-                color = Color.White,
-                shadowElevation = 8.dp
-            ) {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    BottomNavItem(icon = Icons.Default.Home, label = "Início")
-                    BottomNavItem(icon = Icons.Default.Menu, label = "Extrato")
-                    BottomNavItem(icon = Icons.Default.Send, label = "Pagamentos")
-                    BottomNavItem(icon = Icons.Default.MoreVert, label = "Menu")
-                }
+        bottomBar = { BottomBar() },
+        floatingActionButton = {
+            FloatingActionButton(onClick = { showAddDialog = true }) {
+                Icon(Icons.Filled.Add, contentDescription = "Adicionar")
             }
         }
     ) { innerPadding ->
 
+        if (showAddDialog) {
+            AddTransacaoDialog(
+                onDismiss = { showAddDialog = false },
+                onConfirm = { titulo, descricao, valorDouble ->
+                    vm.adicionar(titulo, descricao, valorDouble)
+                    showAddDialog = false
+                }
+            )
+        }
+
+// Editar / Excluir
+        editing?.let { atual ->
+            EditTransacaoDialog(
+                atual = atual,
+                onDismiss = { editing = null },
+                onUpdate = { novoTitulo, novaDesc, novoValor ->
+                    vm.atualizar(atual.copy(titulo = novoTitulo, descricao = novaDesc, valor = novoValor))
+                    editing = null
+                },
+                onDelete = {
+                    vm.deletar(atual)
+                    editing = null
+                }
+            )
+        }
+
+
         LazyColumn(
             modifier = Modifier
                 .fillMaxSize()
-                .height(120.dp)
                 .padding(innerPadding)
                 .padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -94,6 +107,7 @@ fun terceiraTela(navController: NavController) {
                 )
             }
 
+            // Poupança
             item {
                 Row(
                     modifier = Modifier
@@ -102,7 +116,6 @@ fun terceiraTela(navController: NavController) {
                         .padding(horizontal = 8.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically,
-
                 ) {
                     Text(
                         text = "Poupança",
@@ -111,7 +124,10 @@ fun terceiraTela(navController: NavController) {
                             color = Color.Black
                         )
                     )
-                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.clickable{navController.navigate("tela4")}) {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.clickable { navController.navigate("tela4") }
+                    ) {
                         Text(
                             text = "Conectar",
                             style = MaterialTheme.typography.bodyLarge.copy(
@@ -120,7 +136,7 @@ fun terceiraTela(navController: NavController) {
                             )
                         )
                         Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
+                            imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                             contentDescription = "Conectar",
                             tint = Color(0xFFFF4000)
                         )
@@ -128,46 +144,14 @@ fun terceiraTela(navController: NavController) {
                 }
             }
 
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .height(120.dp)
-                        .padding(horizontal = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Text(
-                        text = "Cofrinhos",
-                        style = MaterialTheme.typography.bodyLarge.copy(
-                            fontWeight = FontWeight.SemiBold,
-                            color = Color.Black
-                        )
-                    )
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Text(
-                            text = "Acessar",
-                            style = MaterialTheme.typography.bodyLarge.copy(
-                                color = Color(0xFFFF4000),
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        )
-                        Icon(
-                            imageVector = Icons.Default.KeyboardArrowRight,
-                            contentDescription = "Acessar",
-                            tint = Color(0xFFFF4000)
-                        )
-                    }
-                }
-            }
-
+            // Ações
             item {
                 LazyRow(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.spacedBy(8.dp),
                     contentPadding = PaddingValues(horizontal = 8.dp)
                 ) {
-                    items(actions) { action ->
+                    items(actions) { (title, icon) ->
                         Surface(
                             modifier = Modifier
                                 .width(120.dp)
@@ -178,43 +162,165 @@ fun terceiraTela(navController: NavController) {
                             tonalElevation = 6.dp
                         ) {
                             Box {
-                                bloco2(
-                                    action.first,
-                                    Color.White,
-                                    120,
-                                    alinhamentoTexto = Alignment.BottomStart
-                                )
-                                Icon(
-                                    imageVector = action.second,
-                                    contentDescription = null,
+                                // Se você tiver o bloco2, mantenha; caso não, remova
+                                // bloco2(title, Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
+                                Column(
                                     modifier = Modifier
-                                        .size(50.dp)
-                                        .padding(8.dp)
-                                        .align(Alignment.TopStart),
-                                    tint = Color(0xFFFF4000)
-                                )
+                                        .fillMaxSize()
+                                        .padding(12.dp),
+                                    verticalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Icon(
+                                        imageVector = icon,
+                                        contentDescription = null,
+                                        modifier = Modifier.size(36.dp),
+                                        tint = Color(0xFFFF4000)
+                                    )
+                                    Text(
+                                        text = title,
+                                        style = MaterialTheme.typography.bodySmall,
+                                        color = Color.Black
+                                    )
+                                }
                             }
                         }
                     }
                 }
             }
 
-            items(tarefas) { transacao ->
-                TransacaoCard(transacao)
+            // Agora vem da base
+            items(items = lista) { item ->
+                TransacaoCard(
+                    titulo = item.titulo,
+                    descricao = item.descricao,
+                    valor = item.valor,
+                    onClick = { editing = item }   // abre o dialog de edição
+                )
+            }
 
+            // Botão para limpar tudo (opcional)
+            item {
+                OutlinedButton(onClick = { vm.deletarTudo() }) {
+                    Text("Limpar transações")
+                }
             }
         }
     }
 }
 
 @Composable
-fun TransacaoCard(transacao: Transacao) {
+private fun BottomBar() {
+    Surface(
+        modifier = Modifier
+            .fillMaxWidth()
+            .height(72.dp),
+        color = Color.White,
+        shadowElevation = 8.dp
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            BottomNavItem(icon = Icons.Filled.Home, label = "Início")
+            BottomNavItem(icon = Icons.Filled.Menu, label = "Extrato")
+            BottomNavItem(icon = Icons.AutoMirrored.Filled.Send, label = "Pagamentos")
+            BottomNavItem(icon = Icons.Filled.MoreVert, label = "Menu")
+        }
+    }
+}
+
+// ====== SUPORTE ======
+
+data class Transacao(
+    val titulo: String,
+    val descricao: String,
+    val valor: Double
+)
+
+@Composable
+fun AddTransacaoDialog(
+    onDismiss: () -> Unit,
+    onConfirm: (titulo: String, descricao: String, valor: Double) -> Unit
+) {
+    var titulo by remember { mutableStateOf("") }
+    var descricao by remember { mutableStateOf("") }
+    var valor by remember { mutableStateOf("") }
+    var valorErro by remember { mutableStateOf<String?>(null) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Nova transação") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = titulo,
+                    onValueChange = { titulo = it },
+                    label = { Text("Título") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = descricao,
+                    onValueChange = { descricao = it },
+                    label = { Text("Descrição") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = valor,
+                    onValueChange = { novo ->
+                        // mantém só dígitos, vírgula e ponto
+                        valor = novo.filter { it.isDigit() || it == ',' || it == '.' }
+                        valorErro = null
+                    },
+                    label = { Text("Valor (ex.: 99,90)") },
+                    singleLine = true,
+                    isError = valorErro != null,
+                    supportingText = {
+                        if (valorErro != null) {
+                            Text(valorErro!!, color = MaterialTheme.colorScheme.error)
+                        }
+                    }
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                // aceita vírgula e ponto
+                val parsed = valor.replace(",", ".").toDoubleOrNull()
+                if (parsed == null) {
+                    valorErro = "Informe um número válido (ex.: 99.90)"
+                    return@TextButton
+                }
+                if (titulo.isBlank()) {
+                    valorErro = null
+                    return@TextButton
+                }
+                onConfirm(titulo.trim(), descricao.trim(), parsed)
+            }) {
+                Text("Salvar")
+            }
+        },
+        dismissButton = {
+            TextButton(onClick = onDismiss) { Text("Cancelar") }
+        }
+    )
+}
+
+
+@Composable
+fun TransacaoCard(
+    titulo: String,
+    descricao: String,
+    valor: Double,
+    onClick: () -> Unit
+) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
             .height(100.dp),
-        onClick = {
-        }
+        onClick = onClick
     ) {
         Row(
             modifier = Modifier
@@ -223,33 +329,87 @@ fun TransacaoCard(transacao: Transacao) {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Icon(
-                imageVector = Icons.Default.CheckCircle,
+                imageVector = Icons.Filled.CheckCircle,
                 contentDescription = "Icon check",
                 tint = Color.Red
             )
             Spacer(modifier = Modifier.width(8.dp))
             Column {
                 Text(
-                    text = transacao.titulo,
-                    style = MaterialTheme.typography.bodyLarge.copy(
-                        fontWeight = FontWeight.Bold
-                    )
+                    text = titulo,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold)
                 )
+                Text(text = descricao, style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black))
                 Text(
-                    text = transacao.descricao,
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Black
-                    )
-                )
-                Text(
-                    text = "R$ %.2f".format(transacao.valor),
-                    style = MaterialTheme.typography.bodyMedium.copy(
-                        color = Color.Black
-                    )
+                    text = "R$ %.2f".format(valor),
+                    style = MaterialTheme.typography.bodyMedium.copy(color = Color.Black)
                 )
             }
         }
     }
+}
+
+@Composable
+fun EditTransacaoDialog(
+    atual: TransacaoEntity,
+    onDismiss: () -> Unit,
+    onUpdate: (titulo: String, descricao: String, valor: Double) -> Unit,
+    onDelete: () -> Unit
+) {
+    var titulo by remember { mutableStateOf(atual.titulo) }
+    var descricao by remember { mutableStateOf(atual.descricao) }
+    var valor by remember { mutableStateOf(atual.valor.toString().replace('.', ',')) }
+    var erro by remember { mutableStateOf<String?>(null) }
+
+    AlertDialog(
+        onDismissRequest = onDismiss,
+        title = { Text("Editar transação") },
+        text = {
+            Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+                OutlinedTextField(
+                    value = titulo,
+                    onValueChange = { titulo = it; erro = null },
+                    label = { Text("Título") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = descricao,
+                    onValueChange = { descricao = it; erro = null },
+                    label = { Text("Descrição") },
+                    singleLine = true
+                )
+                OutlinedTextField(
+                    value = valor,
+                    onValueChange = {
+                        valor = it.filter { ch -> ch.isDigit() || ch == ',' || ch == '.' }
+                        erro = null
+                    },
+                    label = { Text("Valor (ex.: 99,90)") },
+                    singleLine = true,
+                    isError = erro != null,
+                    supportingText = { if (erro != null) Text(erro!!, color = MaterialTheme.colorScheme.error) }
+                )
+            }
+        },
+        confirmButton = {
+            TextButton(onClick = {
+                val parsed = valor.replace(',', '.').toDoubleOrNull()
+                if (titulo.isBlank()) { erro = "Informe um título"; return@TextButton }
+                if (parsed == null) { erro = "Informe um número válido (ex.: 99,90)"; return@TextButton }
+                onUpdate(titulo.trim(), descricao.trim(), parsed)
+            }) { Text("Salvar") }
+        },
+        dismissButton = {
+            Row {
+                TextButton(onClick = onDismiss) { Text("Cancelar") }
+                Spacer(Modifier.width(8.dp))
+                TextButton(
+                    onClick = onDelete,
+                    colors = ButtonDefaults.textButtonColors(contentColor = MaterialTheme.colorScheme.error)
+                ) { Text("Excluir") }
+            }
+        }
+    )
 }
 
 @Composable
@@ -258,15 +418,7 @@ fun BottomNavItem(icon: androidx.compose.ui.graphics.vector.ImageVector, label: 
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-        Icon(
-            imageVector = icon,
-            contentDescription = label,
-            tint = Color.Black
-        )
-        Text(
-            text = label,
-            fontSize = 12.sp,
-            color = Color.Black
-        )
+        Icon(imageVector = icon, contentDescription = label, tint = Color.Black)
+        Text(text = label, fontSize = 12.sp, color = Color.Black)
     }
 }
