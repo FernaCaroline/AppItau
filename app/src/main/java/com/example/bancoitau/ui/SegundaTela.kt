@@ -17,8 +17,6 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.compose.ui.graphics.vector.ImageVector
-import com.example.bancoitau.ui.ui.Bloco2
-import com.example.bancoitau.ui.ui.TopBarItau
 
 @Composable
 fun SegundaTela(navController: NavController) {

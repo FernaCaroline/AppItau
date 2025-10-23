@@ -10,14 +10,13 @@ import androidx.navigation.compose.rememberNavController
 import com.example.bancoitau.data.local.BancoItauDatabase
 import com.example.bancoitau.data.repository.AplicacoesRepository
 import com.example.bancoitau.data.repository.TransacoesRepository
-import com.example.bancoitau.ui.ui.PrimeiraTela
+import com.example.bancoitau.ui.PrimeiraTela
 import com.example.bancoitau.ui.SegundaTela
-import com.example.bancoitau.ui.ui.TerceiraTela
-import com.example.bancoitau.ui.ui.QuartaTela
-import com.example.bancoitau.ui.ui.screen_feature.AplicacaoViewModel
-import com.example.bancoitau.ui.ui.screen_feature.TransacaoViewModel
+import com.example.bancoitau.ui.TerceiraTela
+import com.example.bancoitau.ui.QuartaTela
+import com.example.bancoitau.ui.screen_feature.AplicacaoViewModel
+import com.example.bancoitau.ui.screen_feature.TransacaoViewModel
 import com.example.bancoitau.ui.theme.BancoItauTheme
-import com.example.bancoitau.ui.ui.PrimeiraTela
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

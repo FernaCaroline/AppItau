@@ -1,4 +1,4 @@
-package com.example.bancoitau.ui.ui
+package com.example.bancoitau.ui
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -20,8 +20,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
 import com.example.bancoitau.data.local.AplicacaoEntity
-import com.example.bancoitau.ui.BottomNavItem
-import com.example.bancoitau.ui.ui.screen_feature.AplicacaoViewModel
+import com.example.bancoitau.ui.screen_feature.AplicacaoViewModel
 
 @Composable
 fun QuartaTela(

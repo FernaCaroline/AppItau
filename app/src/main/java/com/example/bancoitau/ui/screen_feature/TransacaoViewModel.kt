@@ -1,4 +1,4 @@
-package com.example.bancoitau.ui.ui.screen_feature
+package com.example.bancoitau.ui.screen_feature
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

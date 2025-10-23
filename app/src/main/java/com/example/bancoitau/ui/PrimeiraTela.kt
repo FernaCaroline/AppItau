@@ -1,4 +1,4 @@
-package com.example.bancoitau.ui.ui
+package com.example.bancoitau.ui
 
 import android.widget.Toast
 import androidx.compose.foundation.border
