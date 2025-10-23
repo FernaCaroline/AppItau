@@ -51,7 +51,6 @@ fun TerceiraTela(
             AddTransacaoDialog(
                 onDismiss = { showAddDialog = false },
                 onConfirm = { descricao, valorDouble ->
-                    // tipo simples padrão; ajuste se quiser escolher
                     viewModel.adicionar(descricao = descricao, valor = valorDouble, tipo = "ENTRADA")
                     showAddDialog = false
                 }
