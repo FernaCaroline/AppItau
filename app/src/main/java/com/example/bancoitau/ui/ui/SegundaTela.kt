@@ -1,58 +1,30 @@
-package com.example.bancoitau
-import android.R
-import android.annotation.SuppressLint
-import android.os.Bundle
+package com.example.bancoitau.ui
+
 import android.widget.Toast
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Send
+import androidx.compose.material.icons.filled.*
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.border
-import androidx.compose.foundation.clickable
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.automirrored.filled.ExitToApp
-import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
-import androidx.compose.material.icons.automirrored.filled.Send
-import androidx.compose.material.icons.filled.AccountBox
-import androidx.compose.material.icons.filled.AddCircle
-import androidx.compose.material.icons.filled.ArrowForward
-import androidx.compose.material.icons.filled.DateRange
-import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Face
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Info
-import androidx.compose.material.icons.filled.KeyboardArrowRight
-import androidx.compose.material.icons.filled.MailOutline
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material.icons.filled.MoreVert
-import androidx.compose.material.icons.filled.Phone
-import androidx.compose.material.icons.filled.Send
-import androidx.compose.material3.Icon
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavController
-
-
+import androidx.compose.ui.graphics.vector.ImageVector
+import com.example.bancoitau.ui.ui.Bloco2
+import com.example.bancoitau.ui.ui.TopBarItau
 
 @Composable
-fun segundaTela(navController: NavController) {
+fun SegundaTela(navController: NavController) {
 
     Scaffold(
-        bottomBar= {
+        bottomBar = {
             Surface(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -80,14 +52,13 @@ fun segundaTela(navController: NavController) {
                     BottomNavItem(
                         icon = Icons.Default.Menu,
                         label = "Extrato",
-                        selected = true,
                         onClick = {
                             navController.navigate("tela3") {
                                 popUpTo("tela3") { inclusive = true }
                             }
                         }
                     )
-                    BottomNavItem(icon = Icons.Default.Send, label = "Pagamentos")
+                    BottomNavItem(icon = Icons.AutoMirrored.Filled.Send, label = "Pagamentos")
                     BottomNavItem(icon = Icons.Default.MoreVert, label = "Menu")
                 }
             }
@@ -108,7 +79,6 @@ fun segundaTela(navController: NavController) {
                 Text(
                     text = "Meu Itaú",
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Bold,
                     color = Color.Black,
                     modifier = Modifier
                         .weight(1f)
@@ -124,7 +94,11 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(60.dp))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            // Linha de atalhos
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -134,11 +108,11 @@ fun segundaTela(navController: NavController) {
                     shadowElevation = 6.dp,
                     tonalElevation = 6.dp
                 ) {
-                    Box{
-                        bloco2("Pix e \ntransferir", Color.White,120, alinhamentoTexto = Alignment.BottomStart)
+                    Box {
+                        Bloco2("Pix e \ntransferir", Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
                         Icon(
                             imageVector = Icons.Default.Favorite,
-                            contentDescription = "",
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(50.dp)
                                 .padding(8.dp)
@@ -147,6 +121,7 @@ fun segundaTela(navController: NavController) {
                         )
                     }
                 }
+
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -157,10 +132,10 @@ fun segundaTela(navController: NavController) {
                     tonalElevation = 6.dp
                 ) {
                     Box {
-                        bloco2("Pagar", Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
+                        Bloco2("Pagar", Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
                         Icon(
                             imageVector = Icons.Default.DateRange,
-                            contentDescription = "",
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(50.dp)
                                 .padding(8.dp)
@@ -169,6 +144,7 @@ fun segundaTela(navController: NavController) {
                         )
                     }
                 }
+
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -179,10 +155,10 @@ fun segundaTela(navController: NavController) {
                     tonalElevation = 6.dp
                 ) {
                     Box {
-                        bloco2("Cartão", Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
+                        Bloco2("Cartão", Color.White, 120, alinhamentoTexto = Alignment.BottomStart)
                         Icon(
                             imageVector = Icons.Default.MailOutline,
-                            contentDescription = "",
+                            contentDescription = null,
                             modifier = Modifier
                                 .size(50.dp)
                                 .padding(8.dp)
@@ -195,7 +171,11 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
+            // Cartão: Conta Corrente
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -215,9 +195,7 @@ fun segundaTela(navController: NavController) {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "Conta Corrente",
-                                style = MaterialTheme.typography.bodyLarge.copy(
-                                    fontWeight = FontWeight.Bold
-                                ),
+                                style = MaterialTheme.typography.bodyLarge,
                                 color = Color.Black
                             )
                         }
@@ -225,15 +203,24 @@ fun segundaTela(navController: NavController) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = "Saldo", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold, color = Color.Black)
+                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge, color = Color.Black)
 
                         Spacer(modifier = Modifier.height(24.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "Limite da Conta", style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black, modifier = Modifier.weight(1f))
-                            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Ver mais",
-                                tint = Color.Gray)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Limite da conta",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Icon(
+                                imageVector = Icons.Default.Add,
+                                contentDescription = "Ver mais",
+                                tint = Color.Gray
+                            )
                         }
                     }
                 }
@@ -241,7 +228,11 @@ fun segundaTela(navController: NavController) {
 
             Spacer(modifier = Modifier.height(24.dp))
 
-            Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(8.dp))  {
+            // Cartão: Cartão de crédito
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
                 Surface(
                     modifier = Modifier
                         .weight(1f)
@@ -261,7 +252,7 @@ fun segundaTela(navController: NavController) {
                             Spacer(modifier = Modifier.width(8.dp))
                             Text(
                                 text = "Cartão de crédito",
-                                style = MaterialTheme.typography.bodyLarge.copy(fontWeight = FontWeight.Bold),
+                                style = MaterialTheme.typography.bodyLarge,
                                 color = Color.Black
                             )
                         }
@@ -269,15 +260,24 @@ fun segundaTela(navController: NavController) {
                         Spacer(modifier = Modifier.height(16.dp))
                         Text(text = "Fatura", style = MaterialTheme.typography.bodySmall, color = Color.Gray)
                         Spacer(modifier = Modifier.height(4.dp))
-                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge,
-                            fontWeight = FontWeight.SemiBold, color = Color.Black)
+                        Text(text = "••••••", style = MaterialTheme.typography.bodyLarge, color = Color.Black)
 
                         Spacer(modifier = Modifier.height(24.dp))
-                        Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.fillMaxWidth()) {
-                            Text(text = "Limite da cartão", style = MaterialTheme.typography.bodyMedium,
-                                color = Color.Black, modifier = Modifier.weight(1f))
-                            Icon(imageVector = Icons.Default.KeyboardArrowRight, contentDescription = "Ver mais",
-                                tint = Color.Gray)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            modifier = Modifier.fillMaxWidth()
+                        ) {
+                            Text(
+                                text = "Limite do cartão",
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = Color.Black,
+                                modifier = Modifier.weight(1f)
+                            )
+                            Icon(
+                                imageVector = Icons.Default.KeyboardArrowRight,
+                                contentDescription = "Ver mais",
+                                tint = Color.Gray
+                            )
                         }
                     }
                 }
@@ -299,10 +299,10 @@ fun BottomNavItem(
         verticalArrangement = Arrangement.Center,
         modifier = Modifier
             .padding(horizontal = 8.dp)
-            .clickable { onClick()
-
-
-                Toast.makeText(context, "Voltando ao início...", Toast.LENGTH_SHORT).show()}
+            .clickable {
+                onClick()
+                Toast.makeText(context, label, Toast.LENGTH_SHORT).show()
+            }
     ) {
         Icon(
             imageVector = icon,

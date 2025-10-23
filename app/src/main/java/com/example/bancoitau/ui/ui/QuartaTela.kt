@@ -1,6 +1,5 @@
-package com.example.bancoitau
+package com.example.bancoitau.ui.ui
 
-import android.app.Application
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,25 +8,28 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
+import androidx.compose.material.icons.automirrored.filled.Send
 import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavController
-import androidx.compose.ui.unit.sp
-import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.bancoitau.data.local.AplicacaoEntity
+import com.example.bancoitau.ui.BottomNavItem
+import com.example.bancoitau.ui.ui.screen_feature.AplicacaoViewModel
 
 @Composable
-fun quartaTela(navController: NavController) {
-    val ctx = LocalContext.current
-    val vm: AplicacaoViewModel = viewModel(factory = AplicacaoViewModel.factory(ctx.applicationContext as Application))
-    val lista by vm.lista.collectAsState()
-    val saldo by vm.saldo.collectAsState()
+fun QuartaTela(
+    navController: NavController,
+    viewModel: AplicacaoViewModel
+) {
+    val lista by viewModel.lista.collectAsStateWithLifecycle()
+    val saldo by viewModel.saldo.collectAsStateWithLifecycle()
 
     val actions = listOf(
         "+ R$10,00" to 10.0,
@@ -38,7 +40,6 @@ fun quartaTela(navController: NavController) {
     var valorDigitado by remember { mutableStateOf("") }
     var descricao by remember { mutableStateOf("") }
     var erro by remember { mutableStateOf<String?>(null) }
-
     var editing by remember { mutableStateOf<AplicacaoEntity?>(null) }
 
     Scaffold(
@@ -57,10 +58,10 @@ fun quartaTela(navController: NavController) {
                     horizontalArrangement = Arrangement.SpaceEvenly,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    BottomNavItem(icon = Icons.Default.Home, label = "Início")
-                    BottomNavItem(icon = Icons.Default.Menu, label = "Extrato")
-                    BottomNavItem(icon = Icons.Default.Send, label = "Pagamentos")
-                    BottomNavItem(icon = Icons.Default.MoreVert, label = "Menu")
+                    BottomNavItem(icon = Icons.Filled.Home, label = "Início")
+                    BottomNavItem(icon = Icons.Filled.Menu, label = "Extrato")
+                    BottomNavItem(icon = Icons.AutoMirrored.Filled.Send, label = "Pagamentos")
+                    BottomNavItem(icon = Icons.Filled.MoreVert, label = "Menu")
                 }
             }
         }
@@ -148,7 +149,6 @@ fun quartaTela(navController: NavController) {
                             tonalElevation = 6.dp
                         ) {
                             Box(Modifier.fillMaxSize()) {
-                                // se tiver seu bloco2, pode usar; aqui deixei só o texto
                                 Text(
                                     text = label,
                                     modifier = Modifier
@@ -179,7 +179,7 @@ fun quartaTela(navController: NavController) {
                         modifier = Modifier.fillMaxWidth(),
                         label = { Text("Descrição (ex.: Aplicação mensal)") },
                         singleLine = true,
-                        leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null, tint = Color(0xFFFF4000)) }
+                        leadingIcon = { Icon(Icons.Filled.Edit, contentDescription = null, tint = Color(0xFFFF4000)) }
                     )
 
                     OutlinedTextField(
@@ -203,7 +203,7 @@ fun quartaTela(navController: NavController) {
                             val valor = valorDigitado.replace(',', '.').toDoubleOrNull()
                             if (descricao.isBlank()) { erro = "Informe a descrição"; return@Button }
                             if (valor == null) { erro = "Valor inválido"; return@Button }
-                            vm.adicionar(descricao.trim(), valor)
+                            viewModel.adicionar(descricao.trim(), valor)
                             valorDigitado = ""
                             descricao = ""
                             erro = null
@@ -238,13 +238,17 @@ fun quartaTela(navController: NavController) {
                         }
                         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                             OutlinedButton(onClick = { editing = item }) {
-                                Icon(Icons.Filled.Edit, contentDescription = null); Spacer(Modifier.width(6.dp)); Text("Editar")
+                                Icon(Icons.Filled.Edit, contentDescription = null)
+                                Spacer(Modifier.width(6.dp))
+                                Text("Editar")
                             }
                             OutlinedButton(
-                                onClick = { vm.deletar(item) },
+                                onClick = { viewModel.deletar(item) },
                                 colors = ButtonDefaults.outlinedButtonColors(contentColor = MaterialTheme.colorScheme.error)
                             ) {
-                                Icon(Icons.Filled.Delete, contentDescription = null); Spacer(Modifier.width(6.dp)); Text("Excluir")
+                                Icon(Icons.Filled.Delete, contentDescription = null)
+                                Spacer(Modifier.width(6.dp))
+                                Text("Excluir")
                             }
                         }
                     }
@@ -253,7 +257,7 @@ fun quartaTela(navController: NavController) {
 
             item {
                 OutlinedButton(
-                    onClick = { vm.limpar() },
+                    onClick = { viewModel.limpar() },
                     modifier = Modifier.fillMaxWidth()
                 ) { Text("Limpar todas as aplicações") }
             }
@@ -266,11 +270,11 @@ fun quartaTela(navController: NavController) {
             atual = atual,
             onDismiss = { editing = null },
             onUpdate = { novaDesc, novoValor ->
-                vm.atualizar(atual.copy(descricao = novaDesc, valor = novoValor))
+                viewModel.atualizar(atual.copy(descricao = novaDesc, valor = novoValor))
                 editing = null
             },
             onDelete = {
-                vm.deletar(atual)
+                viewModel.deletar(atual)
                 editing = null
             }
         )

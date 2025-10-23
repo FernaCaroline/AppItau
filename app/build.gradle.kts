@@ -1,9 +1,9 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-    // Se estiver usando o Compose Compiler plugin do catálogo, mantenha:
     alias(libs.plugins.kotlin.compose)
     id("kotlin-kapt")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -40,7 +40,6 @@ android {
     buildFeatures {
         compose = true
     }
-    // Se seu catálogo não controla a versão do Compose Compiler, declare aqui:
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.14"
     }
@@ -54,30 +53,34 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
 
-    // Compose BOM centraliza versões
     implementation(platform(libs.androidx.compose.bom))
 
     // Compose UI
     implementation(libs.androidx.ui)
-    implementation("androidx.compose.ui:ui-text")        // <- necessário p/ KeyboardOptions/KeyboardType
+    implementation("androidx.compose.ui:ui-text")
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
     implementation(libs.androidx.foundation)
-    // Removi duplicatas/itens ambíguos; se tiver `libs.androidx.foundation.layout`, pode tirar.
-    // implementation(libs.androidx.foundation.layout)
 
-    // Navegação Compose
+
     implementation("androidx.navigation:navigation-compose:2.7.7")
 
-    // Lifecycle + Compose (necessários para viewModel() e collectAsState)
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.6")
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.6")
 
     // Room
+    val room_version = "2.8.2"
     implementation("androidx.room:room-runtime:$room_version")
+    ksp("androidx.room:room-compiler:$room_version")
     implementation("androidx.room:room-ktx:$room_version")
-    kapt("androidx.room:room-compiler:$room_version")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.0")
+    // Integração do ViewModel com Jetpack Compose
+    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
+    // Coleta de StateFlow de forma segura no ciclo de vida do Compose (para o collectAsStateWithLifecycle)
+     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.8.0")
 
     // Testes
     testImplementation(libs.junit)
@@ -89,4 +92,6 @@ dependencies {
     // Debug/Preview
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
+
+
 }

@@ -1,4 +1,5 @@
-package com.example.bancoitau
+package com.example.bancoitau.ui.ui
+
 import android.R
 import android.annotation.SuppressLint
 import android.os.Bundle
