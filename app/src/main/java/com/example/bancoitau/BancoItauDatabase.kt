@@ -9,9 +9,9 @@ import com.example.bancoitau.com.example.bancoitau.TransacaoDao
 @Database(
     entities = [
         TransacaoEntity::class,
-        AplicacaoEntity::class  // <- inclua sua nova entidade
+        AplicacaoEntity::class 
     ],
-    version = 2               // <- suba a versão (se já usou 2, vá para 3, etc.)
+    version = 2             
 )
 abstract class BancoItauDatabase : RoomDatabase() {
 
